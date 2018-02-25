@@ -19,13 +19,13 @@ from image_reader import ImageReader
 IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
 
 BATCH_SIZE = 2
-DATA_DIRECTORY = '/SSD_data/cityscapes_dataset/cityscape'
-DATA_LIST_PATH = './list/cityscapes_train_list.txt'
+DATA_DIRECTORY = '~/data_road/testing/image_2'
+DATA_LIST_PATH = './list/kitti_train_list.txt'
 IGNORE_LABEL = 255
 INPUT_SIZE = '713,713'
 LEARNING_RATE = 1e-3
 MOMENTUM = 0.9
-NUM_CLASSES = 19
+NUM_CLASSES = 2
 NUM_STEPS = 60001
 POWER = 0.9
 RANDOM_SEED = 1234
