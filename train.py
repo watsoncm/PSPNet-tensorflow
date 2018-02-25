@@ -19,11 +19,11 @@ from image_reader import ImageReader
 IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
 
 BATCH_SIZE = 2
-DATA_DIRECTORY = '~/data_road/testing/image_2'
+DATA_DIRECTORY = '/home/ubuntu/kitti_road_seg/train/'
 DATA_LIST_PATH = './list/kitti_train_list.txt'
 IGNORE_LABEL = 255
 INPUT_SIZE = '713,713'
-LEARNING_RATE = 1e-3
+LEARNING_RATE = 1e-4
 MOMENTUM = 0.9
 NUM_CLASSES = 2
 NUM_STEPS = 60001
@@ -160,9 +160,9 @@ def main():
         update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 
     with tf.control_dependencies(update_ops):
-        opt_conv = tf.train.MomentumOptimizer(learning_rate, args.momentum)
-        opt_fc_w = tf.train.MomentumOptimizer(learning_rate * 10.0, args.momentum)
-        opt_fc_b = tf.train.MomentumOptimizer(learning_rate * 20.0, args.momentum)
+        opt_conv = tf.train.AdamOptimizer(learning_rate)
+        opt_fc_w = tf.train.AdamOptimizer(learning_rate * 10.0)
+        opt_fc_b = tf.train.AdamOptimizer(learning_rate * 20.0)
 
         grads = tf.gradients(reduced_loss, conv_trainable + fc_w_trainable + fc_b_trainable)
         grads_conv = grads[:len(conv_trainable)]
