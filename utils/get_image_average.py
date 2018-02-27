@@ -16,12 +16,13 @@ def get_arguments():
     return parser.parse_args()
 
 def get_image_mean(fname):
+    """Calculates the pixelwise mean of a single image."""
     img_data = tf.read_file(fname)
     img = tf.image.decode_jpeg(img_data, channels=3) 
     return tf.reduce_mean(tf.cast(img, tf.float32), axis=[0, 1])
 
 def get_train_mean():
-    """Create the model and start the training."""
+    """Gets the pixelwise mean of the entire training set."""
     args = get_arguments()
     file_str = tf.read_file(DATA_LIST_PATH)
     text = tf.sparse_tensor_to_dense(tf.string_split([file_str], '\n'), default_value='')
@@ -32,6 +33,7 @@ def get_train_mean():
     return tf.reduce_mean(avgs, axis=[0])
 
 def main():
+    """Calculates and prints pixelwise mean of entire training set."""
     mean = get_train_mean()
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
