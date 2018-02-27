@@ -17,6 +17,9 @@ ADE20k_param = {'crop_size': [473, 473],
 cityscapes_param = {'crop_size': [720, 720],
                     'num_classes': 19,
                     'model': PSPNet101}
+kitti_param = {'crop_size': [720, 720],
+               'num_classes': 2,
+               'model': PSPNet101}
 
 SAVE_DIR = './output/'
 SNAPSHOT_DIR = './model/'
@@ -31,8 +34,8 @@ def get_arguments():
                         help="Path to save output.")
     parser.add_argument("--flipped-eval", action="store_true",
                         help="whether to evaluate with flipped img.")
-    parser.add_argument("--dataset", type=str, default='',
-                        choices=['ade20k', 'cityscapes'],
+    parser.add_argument("--dataset", type=str, default='kitti',
+                        choices=['ade20k', 'cityscapes', 'kitti'],
                         required=True)
 
     return parser.parse_args()
@@ -58,6 +61,8 @@ def main():
         param = ADE20k_param
     elif args.dataset == 'cityscapes':
         param = cityscapes_param
+    elif args.dataset == 'kitti':
+        param = kitti_param
 
     crop_size = param['crop_size']
     num_classes = param['num_classes']

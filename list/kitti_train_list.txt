@@ -11,7 +11,6 @@ um_000009.png um_road_000009.png
 um_000010.png um_road_000010.png
 um_000011.png um_road_000011.png
 um_000012.png um_road_000012.png
-um_000013.png um_road_000013.png
 um_000014.png um_road_000014.png
 um_000015.png um_road_000015.png
 um_000016.png um_road_000016.png
@@ -37,7 +36,6 @@ um_000035.png um_road_000035.png
 um_000036.png um_road_000036.png
 um_000037.png um_road_000037.png
 um_000038.png um_road_000038.png
-um_000039.png um_road_000039.png
 um_000040.png um_road_000040.png
 um_000041.png um_road_000041.png
 um_000042.png um_road_000042.png
@@ -48,7 +46,6 @@ um_000046.png um_road_000046.png
 um_000047.png um_road_000047.png
 um_000048.png um_road_000048.png
 um_000049.png um_road_000049.png
-um_000050.png um_road_000050.png
 um_000051.png um_road_000051.png
 um_000052.png um_road_000052.png
 um_000053.png um_road_000053.png
@@ -56,7 +53,6 @@ um_000054.png um_road_000054.png
 um_000055.png um_road_000055.png
 um_000056.png um_road_000056.png
 um_000057.png um_road_000057.png
-um_000058.png um_road_000058.png
 um_000059.png um_road_000059.png
 um_000060.png um_road_000060.png
 um_000061.png um_road_000061.png
@@ -82,13 +78,11 @@ um_000080.png um_road_000080.png
 um_000081.png um_road_000081.png
 um_000082.png um_road_000082.png
 um_000083.png um_road_000083.png
-um_000084.png um_road_000084.png
 um_000085.png um_road_000085.png
 um_000086.png um_road_000086.png
 um_000087.png um_road_000087.png
 um_000088.png um_road_000088.png
 um_000089.png um_road_000089.png
-um_000090.png um_road_000090.png
 um_000091.png um_road_000091.png
 um_000092.png um_road_000092.png
 um_000093.png um_road_000093.png
@@ -113,7 +107,6 @@ umm_000016.png umm_road_000016.png
 umm_000017.png umm_road_000017.png
 umm_000018.png umm_road_000018.png
 umm_000019.png umm_road_000019.png
-umm_000020.png umm_road_000020.png
 umm_000021.png umm_road_000021.png
 umm_000022.png umm_road_000022.png
 umm_000023.png umm_road_000023.png
@@ -124,7 +117,6 @@ umm_000027.png umm_road_000027.png
 umm_000028.png umm_road_000028.png
 umm_000029.png umm_road_000029.png
 umm_000030.png umm_road_000030.png
-umm_000031.png umm_road_000031.png
 umm_000032.png umm_road_000032.png
 umm_000033.png umm_road_000033.png
 umm_000034.png umm_road_000034.png
@@ -145,11 +137,9 @@ umm_000048.png umm_road_000048.png
 umm_000049.png umm_road_000049.png
 umm_000050.png umm_road_000050.png
 umm_000051.png umm_road_000051.png
-umm_000052.png umm_road_000052.png
 umm_000053.png umm_road_000053.png
 umm_000054.png umm_road_000054.png
 umm_000055.png umm_road_000055.png
-umm_000056.png umm_road_000056.png
 umm_000057.png umm_road_000057.png
 umm_000058.png umm_road_000058.png
 umm_000059.png umm_road_000059.png
@@ -179,7 +169,6 @@ umm_000082.png umm_road_000082.png
 umm_000083.png umm_road_000083.png
 umm_000084.png umm_road_000084.png
 umm_000085.png umm_road_000085.png
-umm_000086.png umm_road_000086.png
 umm_000087.png umm_road_000087.png
 umm_000088.png umm_road_000088.png
 umm_000089.png umm_road_000089.png
@@ -188,7 +177,6 @@ umm_000091.png umm_road_000091.png
 umm_000092.png umm_road_000092.png
 umm_000093.png umm_road_000093.png
 umm_000094.png umm_road_000094.png
-umm_000095.png umm_road_000095.png
 uu_000000.png uu_road_000000.png
 uu_000001.png uu_road_000001.png
 uu_000002.png uu_road_000002.png
@@ -206,12 +194,10 @@ uu_000013.png uu_road_000013.png
 uu_000014.png uu_road_000014.png
 uu_000015.png uu_road_000015.png
 uu_000016.png uu_road_000016.png
-uu_000017.png uu_road_000017.png
 uu_000018.png uu_road_000018.png
 uu_000019.png uu_road_000019.png
 uu_000020.png uu_road_000020.png
 uu_000021.png uu_road_000021.png
-uu_000022.png uu_road_000022.png
 uu_000023.png uu_road_000023.png
 uu_000024.png uu_road_000024.png
 uu_000025.png uu_road_000025.png
@@ -233,13 +219,11 @@ uu_000040.png uu_road_000040.png
 uu_000041.png uu_road_000041.png
 uu_000042.png uu_road_000042.png
 uu_000043.png uu_road_000043.png
-uu_000044.png uu_road_000044.png
 uu_000045.png uu_road_000045.png
 uu_000046.png uu_road_000046.png
 uu_000047.png uu_road_000047.png
 uu_000048.png uu_road_000048.png
 uu_000049.png uu_road_000049.png
-uu_000050.png uu_road_000050.png
 uu_000051.png uu_road_000051.png
 uu_000052.png uu_road_000052.png
 uu_000053.png uu_road_000053.png
@@ -248,7 +232,6 @@ uu_000055.png uu_road_000055.png
 uu_000056.png uu_road_000056.png
 uu_000057.png uu_road_000057.png
 uu_000058.png uu_road_000058.png
-uu_000059.png uu_road_000059.png
 uu_000060.png uu_road_000060.png
 uu_000061.png uu_road_000061.png
 uu_000062.png uu_road_000062.png
@@ -258,7 +241,6 @@ uu_000065.png uu_road_000065.png
 uu_000066.png uu_road_000066.png
 uu_000067.png uu_road_000067.png
 uu_000068.png uu_road_000068.png
-uu_000069.png uu_road_000069.png
 uu_000070.png uu_road_000070.png
 uu_000071.png uu_road_000071.png
 uu_000072.png uu_road_000072.png
@@ -271,10 +253,8 @@ uu_000078.png uu_road_000078.png
 uu_000079.png uu_road_000079.png
 uu_000080.png uu_road_000080.png
 uu_000081.png uu_road_000081.png
-uu_000082.png uu_road_000082.png
 uu_000083.png uu_road_000083.png
 uu_000084.png uu_road_000084.png
-uu_000085.png uu_road_000085.png
 uu_000086.png uu_road_000086.png
 uu_000087.png uu_road_000087.png
 uu_000088.png uu_road_000088.png

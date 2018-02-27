@@ -12,7 +12,7 @@ from tqdm import trange
 from model import PSPNet101, PSPNet50
 from tools import *
 
-SNAPSHOT_DIR = './model/ade20k_model'
+SNAPSHOT_DIR = './model/model.ckpt-300'
 
 ADE20k_param = {'crop_size': [473, 473],
                 'num_classes': 150, # predict: [0~149] corresponding to label [1~150], ignore class 0 (background) 
@@ -23,12 +23,12 @@ ADE20k_param = {'crop_size': [473, 473],
                 'val_list': './list/ade20k_val_list.txt'}
                 
 cityscapes_param = {'crop_size': [720, 720],
-                    'num_classes': 19,
+                    'num_classes': 2,
                     'ignore_label': 255,
                     'num_steps': 500,
                     'model': PSPNet101,
-                    'data_dir': '/data/cityscapes_dataset/cityscape', #### Change this line
-                    'val_list': './list/cityscapes_val_list.txt'}
+                    'data_dir': '/home/ubuntu/kitti_road_seg/train', #### Change this line
+                    'val_list': './list/kitti_val_list.txt'}
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Reproduced PSPNet")

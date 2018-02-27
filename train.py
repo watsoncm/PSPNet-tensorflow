@@ -23,7 +23,7 @@ DATA_DIRECTORY = '/home/ubuntu/kitti_road_seg/train/'
 DATA_LIST_PATH = './list/kitti_train_list.txt'
 IGNORE_LABEL = 255
 INPUT_SIZE = '713,713'
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 2e-4
 MOMENTUM = 0.9
 NUM_CLASSES = 2
 NUM_STEPS = 60001
@@ -37,7 +37,7 @@ SAVE_PRED_EVERY = 50
 
 
 def get_arguments():
-    parser = argparse.ArgumentParser(description="DeepLab-ResNet Network")
+    parser = argparse.ArgumentParser(description="PSPNet Network")
     parser.add_argument("--batch-size", type=int, default=BATCH_SIZE,
                         help="Number of images sent to the network in one step.")
     parser.add_argument("--data-dir", type=str, default=DATA_DIRECTORY,
