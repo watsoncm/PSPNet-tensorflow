@@ -7,8 +7,7 @@ from __future__ import print_function
 import argparse
 import os
 import sys
-import time
-
+import time 
 import tensorflow as tf
 import numpy as np
 
@@ -16,7 +15,7 @@ from model import PSPNet101
 from tools import prepare_label
 from image_reader import ImageReader
 
-IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
+IMG_MEAN = np.array((89.592376709, 96.4095153809, 93.5726928711), dtype=np.float32)
 
 BATCH_SIZE = 2
 DATA_DIRECTORY = '/home/ubuntu/kitti_road_seg/train/'
