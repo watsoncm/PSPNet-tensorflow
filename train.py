@@ -20,10 +20,9 @@ IMG_MEAN = np.array((89.592376709, 96.4095153809, 93.5726928711), dtype=np.float
 BATCH_SIZE = 2
 DATA_DIRECTORY = '/home/ubuntu/kitti_road_seg/train/'
 DATA_LIST_PATH = './list/kitti_train_list.txt'
-IGNORE_LABEL = 255
+IGNORE_LABEL = 0 
 INPUT_SIZE = '713,713'
 LEARNING_RATE = 2e-4
-MOMENTUM = 0.9
 NUM_CLASSES = 2
 NUM_STEPS = 60001
 POWER = 0.9
@@ -51,8 +50,6 @@ def get_arguments():
                         help="Whether to updates the running means and variances during the training.")
     parser.add_argument("--learning-rate", type=float, default=LEARNING_RATE,
                         help="Base learning rate for training with polynomial decay.")
-    parser.add_argument("--momentum", type=float, default=MOMENTUM,
-                        help="Momentum component of the optimiser.")
     parser.add_argument("--not-restore-last", action="store_true",
                         help="Whether to not restore last (FC) layers.")
     parser.add_argument("--num-classes", type=int, default=NUM_CLASSES,
