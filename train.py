@@ -22,7 +22,7 @@ DATA_DIRECTORY = '/home/ubuntu/kitti_road_seg/train/'
 DATA_LIST_PATH = './list/kitti_train_list.txt'
 IGNORE_LABEL = 0 
 INPUT_SIZE = '713,713'
-LEARNING_RATE = 2e-4
+LEARNING_RATE = 5e-5
 NUM_CLASSES = 2
 NUM_STEPS = 60001
 POWER = 0.9
@@ -122,7 +122,7 @@ def main():
 
     # According from the prototxt in Caffe implement, learning rate must multiply by 10.0 in pyramid module
     fc_list = ['conv5_3_pool1_conv', 'conv5_3_pool2_conv', 'conv5_3_pool3_conv', 'conv5_3_pool6_conv', 'conv6', 'conv5_4']
-    restore_var = [v for v in tf.global_variables()]
+    restore_var = [v for v in tf.global_variables() if v.name.split('/')[0] not in fc_list or not args.not_restore_last]
     all_trainable = [v for v in tf.trainable_variables() if ('beta' not in v.name and 'gamma' not in v.name) or args.train_beta_gamma]
     fc_trainable = [v for v in all_trainable if v.name.split('/')[0] in fc_list]
     conv_trainable = [v for v in all_trainable if v.name.split('/')[0] not in fc_list] # lr * 1.0
