@@ -6,37 +6,11 @@ import os
 import sys
 
 IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
-label_colours = [(128, 64, 128), (244, 35, 231), (69, 69, 69)
-                # 0 = road, 1 = sidewalk, 2 = building
-                ,(102, 102, 156), (190, 153, 153), (153, 153, 153)
-                # 3 = wall, 4 = fence, 5 = pole
-                ,(250, 170, 29), (219, 219, 0), (106, 142, 35)
-                # 6 = traffic light, 7 = traffic sign, 8 = vegetation
-                ,(152, 250, 152), (69, 129, 180), (219, 19, 60)
-                # 9 = terrain, 10 = sky, 11 = person
-                ,(255, 0, 0), (0, 0, 142), (0, 0, 69)
-                # 12 = rider, 13 = car, 14 = truck
-                ,(0, 60, 100), (0, 79, 100), (0, 0, 230)
-                # 15 = bus, 16 = train, 17 = motocycle
-                ,(119, 10, 32)]
-                # 18 = bicycle
-
-matfn = './utils/color150.mat'
-
-def read_labelcolours(matfn):
-    mat = sio.loadmat(matfn)
-    color_table = mat['colors']
-    shape = color_table.shape
-    color_list = [tuple(color_table[i]) for i in range(shape[0])]
-
-    return color_list
+label_colours = [(0, 0, 0), (255, 0, 0), (255, 0, 255)]
+                # 0 = background, 1 = not road, 2 = road
 
 def decode_labels(mask, img_shape, num_classes):
-    if num_classes == 150:
-        color_table = read_labelcolours(matfn)
-    else:
-        color_table = label_colours
-
+    color_table = label_colours
     color_mat = tf.constant(color_table, dtype=tf.float32)
     onehot_output = tf.one_hot(mask, depth=num_classes)
     onehot_output = tf.reshape(onehot_output, (-1, num_classes))
