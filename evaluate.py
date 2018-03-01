@@ -12,23 +12,17 @@ from tqdm import trange
 from model import PSPNet101, PSPNet50
 from tools import *
 
-SNAPSHOT_DIR = './model/model.ckpt-300'
+np.set_printoptions(threshold=np.nan)
 
-ADE20k_param = {'crop_size': [473, 473],
-                'num_classes': 150, # predict: [0~149] corresponding to label [1~150], ignore class 0 (background) 
-                'ignore_label': 0,
-                'num_steps': 2000,
-                'model': PSPNet50,
-                'data_dir': '../ADEChallengeData2016/', #### Change this line
-                'val_list': './list/ade20k_val_list.txt'}
-                
-cityscapes_param = {'crop_size': [720, 720],
-                    'num_classes': 2,
-                    'ignore_label': 255,
-                    'num_steps': 500,
-                    'model': PSPNet101,
-                    'data_dir': '/home/ubuntu/kitti_road_seg/train', #### Change this line
-                    'val_list': './list/kitti_val_list.txt'}
+SNAPSHOT_DIR = './model'
+
+kitti_param = {'crop_size': [720, 720],
+               'num_classes': 2,
+               'ignore_label': 0,
+               'num_steps': 500,
+               'model': PSPNet101,
+               'data_dir': '/home/ubuntu/kitti_road_seg/train',
+               'val_list': './list/kitti_val_list.txt'}
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Reproduced PSPNet")
@@ -37,9 +31,8 @@ def get_arguments():
                         help="Path to restore weights.")
     parser.add_argument("--flipped-eval", action="store_true",
                         help="whether to evaluate with flipped img.")
-    parser.add_argument("--dataset", type=str, default='',
-                        choices=['ade20k', 'cityscapes'],
-                        required=True)
+    parser.add_argument("--dataset", type=str, default='kitti',
+                        choices=['ade20k', 'cityscapes', 'kitti'])
 
     return parser.parse_args()
 
@@ -49,12 +42,7 @@ def load(saver, sess, ckpt_path):
 
 def main():
     args = get_arguments()
-
-    # load parameters
-    if args.dataset == 'ade20k':
-        param = ADE20k_param
-    elif args.dataset == 'cityscapes':
-        param = cityscapes_param
+    param = kitti_param
 
     crop_size = param['crop_size']
     num_classes = param['num_classes']
@@ -110,6 +98,8 @@ def main():
         mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes+1)
     elif args.dataset == 'cityscapes':
         mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes)
+    elif args.dataset == 'kitti':
+        mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes)
 
     # Set up tf session and initialize variables.
     config = tf.ConfigProto()
@@ -138,6 +128,8 @@ def main():
         f1 = os.path.join(data_dir, f1)
         f2 = os.path.join(data_dir, f2)
 
+        print('PRED:')
+        print(sess.run(pred, feed_dict={image_filename: f1, anno_filename: f2}))
         _ = sess.run(update_op, feed_dict={image_filename: f1, anno_filename: f2})
 
     print('mIoU: {:04f}'.format(sess.run(mIoU)))

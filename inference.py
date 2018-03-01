@@ -11,12 +11,6 @@ from scipy import misc
 from model import PSPNet101, PSPNet50
 from tools import *
 
-ADE20k_param = {'crop_size': [473, 473],
-                'num_classes': 150, 
-                'model': PSPNet50}
-cityscapes_param = {'crop_size': [720, 720],
-                    'num_classes': 19,
-                    'model': PSPNet101}
 kitti_param = {'crop_size': [720, 720],
                'num_classes': 2,
                'model': PSPNet101}
@@ -35,8 +29,7 @@ def get_arguments():
     parser.add_argument("--flipped-eval", action="store_true",
                         help="whether to evaluate with flipped img.")
     parser.add_argument("--dataset", type=str, default='kitti',
-                        choices=['ade20k', 'cityscapes', 'kitti'],
-                        required=True)
+                        choices=['ade20k', 'cityscapes', 'kitti'])
 
     return parser.parse_args()
 
@@ -57,13 +50,7 @@ def main():
     args = get_arguments()
 
     # load parameters
-    if args.dataset == 'ade20k':
-        param = ADE20k_param
-    elif args.dataset == 'cityscapes':
-        param = cityscapes_param
-    elif args.dataset == 'kitti':
-        param = kitti_param
-
+    param = kitti_param
     crop_size = param['crop_size']
     num_classes = param['num_classes']
     PSPNet = param['model']
@@ -113,6 +100,7 @@ def main():
     else:
         print('No checkpoint file found.')
     
+    print(sess.run(raw_output)) 
     preds = sess.run(pred)
     
     if not os.path.exists(args.save_dir):

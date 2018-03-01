@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import tensorflow as tf
 import os
+import sys
 
 IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
 label_colours = [(128, 64, 128), (244, 35, 231), (69, 69, 69)
