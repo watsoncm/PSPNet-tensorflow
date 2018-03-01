@@ -1,4 +1,7 @@
 # PSPNet_tensorflow
+
+Results are in progress -- so far, transfer learning from the baseline weights works and decreases the loss, but evaluation appears to always result in a single label for the whole image. Sadly, we can't treat the world as one massive road, but it appears that the gt tensor in train.py is always a single value. We are currently looking into why this is the case.
+
 ## Introduction
   This is an implementation of PSPNet in TensorFlow for semantic segmentation on the [cityscapes](https://www.cityscapes-dataset.com/) dataset. We first convert weight from [Original Code](https://github.com/hszhao/PSPNet) by using [caffe-tensorflow](https://github.com/ethereon/caffe-tensorflow) framework.
 

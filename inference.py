@@ -100,8 +100,10 @@ def main():
     else:
         print('No checkpoint file found.')
     
-    print(sess.run(raw_output)) 
+    print(sess.run(raw_output))
+    print(sess.run(raw_output_up)) 
     preds = sess.run(pred)
+    print(preds)
     
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
