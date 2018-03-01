@@ -178,6 +178,8 @@ def main():
     init = tf.global_variables_initializer()
     
     sess.run(init)
+
+    # print(sess.run(raw_output))
     
     # Saver for storing checkpoints of the model.
     saver = tf.train.Saver(var_list=tf.global_variables(), max_to_keep=10)

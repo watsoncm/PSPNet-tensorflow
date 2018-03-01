@@ -11,7 +11,7 @@ from scipy import misc
 from model import PSPNet101, PSPNet50
 from tools import *
 
-kitti_param = {'crop_size': [720, 720],
+kitti_param = {'crop_size': [1242, 375],
                'num_classes': 2,
                'model': PSPNet101}
 
