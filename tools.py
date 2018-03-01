@@ -5,7 +5,7 @@ import tensorflow as tf
 import os
 import sys
 
-IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
+IMG_MEAN = np.array((89.592376709, 96.4095153809, 93.5726928711), dtype=np.float32)
 label_colours = [(0, 0, 0), (255, 0, 0), (255, 0, 255)]
                 # 0 = background, 1 = not road, 2 = road
 
