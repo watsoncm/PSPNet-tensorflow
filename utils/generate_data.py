@@ -8,6 +8,7 @@ import glob
 import argparse
 import random
 import shutil
+from tqdm import tqdm
 from PIL import Image
 
 DATA_DIRECTORY = '/home/ubuntu/data_road'
@@ -35,34 +36,27 @@ def get_arguments():
 
 def preprocess_gt(img):
     out_img = np.zeros(img.shape[:2])
-    for i in range(img.shape[0]):
-        for j in range(img.shape[1]):
-            for k, label_color in enumerate(label_colors):
-                print(img[i, j])
-                print(label_color)
-                print(img[i, j] == label_color)
-                if (img[i, j] == label_color).all():
-                    out_img[i, j] = k
+    for i, label_color in enumerate(label_colors):
+        eq_arr = (img == np.array(label_color).reshape(1, 1, 3))
+        out_img[np.all(eq_arr, axis=2)] = i
     return out_img
 
 
 def create_dataset(new_train_dir, new_test_dir, old_train_dir, old_train_gt_dir, old_test_dir):
-    print('creating dataset')
     os.makedirs(new_train_dir)
     os.makedirs(new_test_dir)
-    print('yuparooni {}'.format(new_test_dir))
 
     destinations = {old_train_dir:    new_train_dir, 
                     old_train_gt_dir: new_train_dir,
                     old_test_dir:     new_test_dir}
 
     for src_dir, dst_dir in destinations.iteritems():
-        for img_path in glob.glob(os.path.join(src_dir, '*.png')):
+        for img_path in tqdm(glob.glob(os.path.join(src_dir, '*.png'))):
             if src_dir == old_train_gt_dir:
                 fname = os.path.basename(img_path)
                 output_path = os.path.join(dst_dir, fname)
                 img = np.array(Image.open(img_path))
-                Image.fromarray(preprocess_gt(img)).save(output_path, "PNG")
+                Image.fromarray(preprocess_gt(img)).convert('RGB').save(output_path, "PNG")
             else:
                 shutil.copy(img_path, dst_dir)
 
