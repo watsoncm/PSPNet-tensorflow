@@ -8,15 +8,9 @@ import sys
 IMG_MEAN = np.array((89.592376709, 96.4095153809, 93.5726928711), dtype=np.float32)
 label_colours = [(255, 0, 0), (255, 0, 255)]
                 # 1 = not road, 2 = road
-matfn = './utils/color150.mat'
 
 def decode_labels(mask, img_shape, num_classes):
-
-    mat = sio.loadmat(matfn)
-    print(mat['colors'].shape)
-
-    color_table = label_colours
-    color_mat = tf.constant(color_table, dtype=tf.float32)
+    color_mat = tf.constant(label_colors, dtype=tf.float32)
     onehot_output = tf.one_hot(mask, depth=num_classes)
     onehot_output = tf.reshape(onehot_output, (-1, num_classes))
     pred = tf.matmul(onehot_output, color_mat)

@@ -12,17 +12,15 @@ from tqdm import trange
 from model import PSPNet101, PSPNet50
 from tools import *
 
-np.set_printoptions(threshold=np.nan)
-
 SNAPSHOT_DIR = './model'
 
-kitti_param = {'crop_size': [720, 720],
-               'num_classes': 2,
-               'ignore_label': 0,
-               'num_steps': 500,
-               'model': PSPNet101,
-               'data_dir': '/home/ubuntu/kitti_road_seg/train',
-               'val_list': './list/kitti_val_list.txt'}
+param = {'crop_size': [720, 720],
+         'num_classes': 2,
+         'ignore_label': 0,
+         'num_steps': 500,
+         'model': PSPNet101,
+         'data_dir': '/home/ubuntu/kitti_road_seg/train',
+         'val_list': './list/kitti_val_list.txt'}
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Reproduced PSPNet")
@@ -65,7 +63,7 @@ def main():
     h, w = (tf.maximum(crop_size[0], shape[0]), tf.maximum(crop_size[1], shape[1]))
     img = preprocess(img, h, w)
 
-     # Create network.
+    # Create network.
     net = PSPNet({'data': img}, is_training=False, num_classes=num_classes)
     with tf.variable_scope('', reuse=True):
         flipped_img = tf.image.flip_left_right(tf.squeeze(img))
@@ -93,13 +91,8 @@ def main():
     gt = tf.cast(tf.gather(raw_gt, indices), tf.int32)
     pred = tf.gather(pred_flatten, indices)
 
-    if args.dataset == 'ade20k':
-        pred = tf.add(pred, tf.constant(1, dtype=tf.int64))
-        mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes+1)
-    elif args.dataset == 'cityscapes':
-        mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes)
-    elif args.dataset == 'kitti':
-        mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes)
+    pred = tf.add(pred, tf.constant(1, dtype=tf.int64))
+    mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes+1)
 
     # Set up tf session and initialize variables.
     config = tf.ConfigProto()

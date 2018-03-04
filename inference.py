@@ -11,9 +11,9 @@ from scipy import misc
 from model import PSPNet101, PSPNet50
 from tools import *
 
-kitti_param = {'crop_size': [1242, 375],
-               'num_classes': 2,
-               'model': PSPNet101}
+param = {'crop_size': [1242, 375],
+         'num_classes': 2,
+         'model': PSPNet101}
 
 SAVE_DIR = './output/'
 SNAPSHOT_DIR = './model/'
@@ -50,7 +50,6 @@ def main():
     args = get_arguments()
 
     # load parameters
-    param = kitti_param
     crop_size = param['crop_size']
     num_classes = param['num_classes']
     PSPNet = param['model']
