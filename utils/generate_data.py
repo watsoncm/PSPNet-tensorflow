@@ -3,8 +3,12 @@ Based on DrSleep's instructions here: https://gist.github.com/DrSleep/4bce37254c
 """
 
 import os
+import numpy as np
 import glob
-from PIL import image
+import argparse
+import random
+import shutil
+from PIL import Image
 
 DATA_DIRECTORY = '/home/ubuntu/data_road'
 DATA_OUTPUT_DIRECTORY = '/home/ubuntu/kitti_road_seg'
@@ -12,65 +16,76 @@ DATA_TRAIN_LIST_PATH = '../list/kitti_train_list.txt'
 DATA_VAL_LIST_PATH = '../list/kitti_val_list.txt'
 TRAIN_VAL_SPLIT = 0.8
 
-label_colours = [(0, 0, 0), (255, 0, 0), (255, 0, 255)]
+label_colors = [(0, 0, 0), (255, 0, 0), (255, 0, 255)]
+
+parser = argparse.ArgumentParser(description='Preprocess the KITTI dataset.')
 
 
 def get_arguments():
     parser.add_argument("--data-dir", type=str, default=DATA_DIRECTORY,
                         help="Path to the directory containing the KITTI dataset.")
-    parser.add_argument("--data-list", type=str, default=DATA_LIST_PATH,
+    parser.add_argument("--data-train-list-path", type=str, default=DATA_TRAIN_LIST_PATH,
+                        help="Path to the file listing the images in the dataset.")
+    parser.add_argument("--data-val-list-path", type=str, default=DATA_VAL_LIST_PATH,
                         help="Path to the file listing the images in the dataset.")
     parser.add_argument("--data-output-dir", type=str, default=DATA_OUTPUT_DIRECTORY,
                         help="Path to the output directory for the cleaned KITTI dataset.")
+    return parser.parse_args()
 
 
 def preprocess_gt(img):
     out_img = np.zeros(img.shape[:2])
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            if img[i, j] < len(label_colours):
-                out_img[i, j] = label_colours[img[i, j]]
+            for k, label_color in enumerate(label_colors):
+                print(img[i, j])
+                print(label_color)
+                print(img[i, j] == label_color)
+                if (img[i, j] == label_color).all():
+                    out_img[i, j] = k
     return out_img
 
 
 def create_dataset(new_train_dir, new_test_dir, old_train_dir, old_train_gt_dir, old_test_dir):
+    print('creating dataset')
     os.makedirs(new_train_dir)
     os.makedirs(new_test_dir)
+    print('yuparooni {}'.format(new_test_dir))
 
     destinations = {old_train_dir:    new_train_dir, 
                     old_train_gt_dir: new_train_dir,
                     old_test_dir:     new_test_dir}
 
     for src_dir, dst_dir in destinations.iteritems():
-        for img_path in glob.glob(os.path.join(src_dir, '*.jpg')):
-            if 
+        for img_path in glob.glob(os.path.join(src_dir, '*.png')):
             if src_dir == old_train_gt_dir:
                 fname = os.path.basename(img_path)
                 output_path = os.path.join(dst_dir, fname)
-                img = Image.open(img_path)
-                preprocess_gt(img).save(output_path, "JPEG")
+                img = np.array(Image.open(img_path))
+                Image.fromarray(preprocess_gt(img)).save(output_path, "PNG")
             else:
                 shutil.copy(img_path, dst_dir)
 
     return new_train_dir, new_test_dir
 
 
-def generate_lists(old_train_dir, data_train_list_path, data_test_list_path):
+def generate_lists(old_train_dir, data_train_list_path, data_val_list_path):
     train_val_imgs = os.listdir(old_train_dir)
-    train_imgs = random.sample(train_val_imgs, len(train_val_imgs) * TRAIN_VAL_SPLIT)
+    train_imgs = random.sample(train_val_imgs, int(len(train_val_imgs) * TRAIN_VAL_SPLIT))
     val_imgs = [img for img in train_val_imgs if img not in train_imgs]
-    test_imgs = os.listdir(old_test_dir)
     
-    paths = {train_imgs: data_train_list_path,
-             test_imgs:  data_test_list_path}
+    paths = {data_train_list_path: train_imgs,
+             data_val_list_path: val_imgs}
 
-    for imgs, path in paths.iteritems():
+    for path, imgs in paths.iteritems():
         lines = []
         for img in imgs:
-            gt_img = '_'.join(img.split('_').insert(1, 'road'))
+            gt_img_parts = img.split('_')
+            gt_img_parts.insert(1, 'road')
+            gt_img = '_'.join(gt_img_parts)
             lines.append('{} {}'.format(img, gt_img))
     
-        with open(path) as f:
+        with open(path, 'w') as f:
             f.writelines(lines)
 
 
@@ -84,4 +99,7 @@ def main():
     old_test_dir = os.path.join(args.data_dir, 'testing', 'image_2')
 
     train_dir, test_dir = create_dataset(new_train_dir, new_test_dir, old_train_dir, old_train_gt_dir, old_test_dir)    
-    generate_lists(old_train_dir, args.data_train_list_path, args.data_test_list_path)
+    generate_lists(old_train_dir, args.data_train_list_path, args.data_val_list_path)
+
+if __name__ == '__main__':
+    main()
