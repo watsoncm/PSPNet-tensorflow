@@ -15,12 +15,12 @@ from tools import *
 SNAPSHOT_DIR = './model'
 
 param = {'crop_size': [720, 720],
-         'num_classes': 2,
+         'num_classes': 3,
          'ignore_label': 0,
-         'num_steps': 500,
+         'num_steps': 231,
          'model': PSPNet101,
          'data_dir': '/home/ubuntu/kitti_road_seg/train',
-         'val_list': './list/kitti_val_list.txt'}
+         'val_list': './list/kitti_train_list.txt'}
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Reproduced PSPNet")
@@ -40,7 +40,6 @@ def load(saver, sess, ckpt_path):
 
 def main():
     args = get_arguments()
-    param = kitti_param
 
     crop_size = param['crop_size']
     num_classes = param['num_classes']
@@ -91,7 +90,7 @@ def main():
     gt = tf.cast(tf.gather(raw_gt, indices), tf.int32)
     pred = tf.gather(pred_flatten, indices)
 
-    pred = tf.add(pred, tf.constant(1, dtype=tf.int64))
+    # pred = tf.add(pred, tf.constant(1, dtype=tf.int64))
     mIoU, update_op = tf.contrib.metrics.streaming_mean_iou(pred, gt, num_classes=num_classes+1)
 
     # Set up tf session and initialize variables.

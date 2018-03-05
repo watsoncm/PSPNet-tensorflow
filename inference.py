@@ -12,7 +12,7 @@ from model import PSPNet101, PSPNet50
 from tools import *
 
 param = {'crop_size': [720, 720],
-         'num_classes': 2,
+         'num_classes': 3,
          'model': PSPNet101}
 
 SAVE_DIR = './output/'

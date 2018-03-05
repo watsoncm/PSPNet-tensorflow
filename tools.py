@@ -6,7 +6,7 @@ import os
 import sys
 
 IMG_MEAN = np.array((89.592376709, 96.4095153809, 93.5726928711), dtype=np.float32)
-label_colors = [(255, 0, 0), (255, 0, 255)]
+label_colors = [(0, 0, 0), (255, 0, 0), (255, 0, 255)]
                 # 1 = not road, 2 = road
 
 def decode_labels(mask, img_shape, num_classes):
@@ -20,12 +20,12 @@ def decode_labels(mask, img_shape, num_classes):
 
 def prepare_label(input_batch, new_size, num_classes, one_hot=True):
     with tf.name_scope('label_encode'):
-        input_batch = tf.image.resize_nearest_neighbor(input_batch, new_size) # as labels are integer numbers, need to use NN interp.
-        input_batch = tf.squeeze(input_batch, squeeze_dims=[3]) # reducing the channel dimension.
+        input_batch = tf.image.resize_nearest_neighbor(tf.Print(input_batch, ['input_batch:', tf.unique_with_counts(tf.reshape(input_batch, [-1]))[2]]), new_size) # as labels are integer numbers, need to use NN interp.
+        input_batch = tf.squeeze(tf.Print(input_batch, ['screaming', tf.unique_with_counts(tf.reshape(input_batch, [-1]))[2]]), squeeze_dims=[3]) # reducing the channel dimension.
         if one_hot:
             input_batch = tf.one_hot(input_batch, depth=num_classes)
             
-    return input_batch
+    return tf.Print(input_batch, ['aosfihaweoihfapowehfp', tf.unique_with_counts(tf.reshape(input_batch, [-1]))[2]])
 
 
 def load_img(img_path):
