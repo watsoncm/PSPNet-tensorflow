@@ -4,6 +4,7 @@ Based on DrSleep's instructions here: https://gist.github.com/DrSleep/4bce37254c
 
 import os
 import numpy as np
+import scipy.misc
 import glob
 import argparse
 import random
@@ -13,11 +14,12 @@ from PIL import Image
 
 DATA_DIRECTORY = '/home/ubuntu/data_road'
 DATA_OUTPUT_DIRECTORY = '/home/ubuntu/kitti_road_seg'
-DATA_TRAIN_LIST_PATH = '../list/kitti_train_list.txt'
-DATA_VAL_LIST_PATH = '../list/kitti_val_list.txt'
+DATA_TRAIN_LIST_PATH = './list/kitti_train_list.txt'
+DATA_VAL_LIST_PATH = './list/kitti_val_list.txt'
 TRAIN_VAL_SPLIT = 0.8
 
 label_colors = [(0, 0, 0), (255, 0, 0), (255, 0, 255)]
+output_size = (2484, 750)
 
 parser = argparse.ArgumentParser(description='Preprocess the KITTI dataset.')
 
@@ -49,16 +51,18 @@ def create_dataset(new_train_dir, new_test_dir, old_train_dir, old_train_gt_dir,
     destinations = {old_train_dir:    new_train_dir, 
                     old_train_gt_dir: new_train_dir,
                     old_test_dir:     new_test_dir}
-
+    
     for src_dir, dst_dir in destinations.iteritems():
         for img_path in tqdm(glob.glob(os.path.join(src_dir, '*.png'))):
+            fname = os.path.basename(img_path)
+            output_path = os.path.join(dst_dir, fname)
+            img = Image.open(img_path)
             if src_dir == old_train_gt_dir:
-                fname = os.path.basename(img_path)
-                output_path = os.path.join(dst_dir, fname)
-                img = np.array(Image.open(img_path))
-                Image.fromarray(preprocess_gt(img)).convert('RGB').save(output_path, "PNG")
+                classes = preprocess_gt(np.array(img))
+                img = Image.fromarray(classes).convert('RGB').resize(output_size, Image.NEAREST)
             else:
-                shutil.copy(img_path, dst_dir)
+                img = img.resize(output_size, Image.BILINEAR)
+            img.save(output_path, 'PNG')
 
     return new_train_dir, new_test_dir
 
@@ -77,7 +81,7 @@ def generate_lists(old_train_dir, data_train_list_path, data_val_list_path):
             gt_img_parts = img.split('_')
             gt_img_parts.insert(1, 'road')
             gt_img = '_'.join(gt_img_parts)
-            lines.append('{} {}'.format(img, gt_img))
+            lines.append('{} {}\n'.format(img, gt_img))
     
         with open(path, 'w') as f:
             f.writelines(lines)

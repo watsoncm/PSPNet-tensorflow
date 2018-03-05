@@ -6,7 +6,7 @@ import os
 import sys
 
 IMG_MEAN = np.array((89.592376709, 96.4095153809, 93.5726928711), dtype=np.float32)
-label_colours = [(255, 0, 0), (255, 0, 255)]
+label_colors = [(255, 0, 0), (255, 0, 255)]
                 # 1 = not road, 2 = road
 
 def decode_labels(mask, img_shape, num_classes):

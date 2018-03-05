@@ -50,8 +50,8 @@ def get_arguments():
                         help="Whether to updates the running means and variances during the training.")
     parser.add_argument("--learning-rate", type=float, default=LEARNING_RATE,
                         help="Base learning rate for training with polynomial decay.")
-    parser.add_argument("--not-restore-last", action="store_true",
-                        help="Whether to not restore last (FC) layers.")
+    parser.add_argument("--restore-last", action="store_false",
+                        help="Whether to restore last (FC) layers.")
     parser.add_argument("--num-classes", type=int, default=NUM_CLASSES,
                         help="Number of classes to predict (including background).")
     parser.add_argument("--num-steps", type=int, default=NUM_STEPS,
@@ -122,7 +122,7 @@ def main():
 
     # According from the prototxt in Caffe implement, learning rate must multiply by 10.0 in pyramid module
     fc_list = ['conv5_3_pool1_conv', 'conv5_3_pool2_conv', 'conv5_3_pool3_conv', 'conv5_3_pool6_conv', 'conv6', 'conv5_4']
-    restore_var = [v for v in tf.global_variables() if v.name.split('/')[0] not in fc_list or not args.not_restore_last]
+    restore_var = [v for v in tf.global_variables() if v.name.split('/')[0] not in fc_list or args.restore_last]
     all_trainable = [v for v in tf.trainable_variables() if ('beta' not in v.name and 'gamma' not in v.name) or args.train_beta_gamma]
     fc_trainable = [v for v in all_trainable if v.name.split('/')[0] in fc_list]
     conv_trainable = [v for v in all_trainable if v.name.split('/')[0] not in fc_list] # lr * 1.0
@@ -140,7 +140,7 @@ def main():
     prediction = tf.gather(raw_prediction, indices)
                                                                                             
     # Pixel-wise softmax loss.
-    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.Print(prediction, ["pred:", prediction]), labels=tf.Print(gt, ["gt:", tf.count_nonzero(gt)]))
+    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.Print(prediction, ["pred counts:", tf.unique_with_counts(tf.reshape(tf.argmax(prediction, -1), [-1]))[2]]), labels=tf.Print(gt, ["gt:", tf.unique(tf.reshape(gt, [-1]))[0]]))
     l2_losses = [args.weight_decay * tf.nn.l2_loss(v) for v in tf.trainable_variables() if 'weights' in v.name]
     reduced_loss = tf.reduce_mean(loss) + tf.add_n(l2_losses)
 

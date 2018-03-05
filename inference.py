@@ -11,7 +11,7 @@ from scipy import misc
 from model import PSPNet101, PSPNet50
 from tools import *
 
-param = {'crop_size': [1242, 375],
+param = {'crop_size': [720, 720],
          'num_classes': 2,
          'model': PSPNet101}
 
@@ -34,13 +34,13 @@ def get_arguments():
     return parser.parse_args()
 
 def save(saver, sess, logdir, step):
-   model_name = 'model.ckpt'
-   checkpoint_path = os.path.join(logdir, model_name)
+    model_name = 'model.ckpt'
+    checkpoint_path = os.path.join(logdir, model_name)
 
-   if not os.path.exists(logdir):
-      os.makedirs(logdir)
-   saver.save(sess, checkpoint_path, global_step=step)
-   print('The checkpoint has been created.')
+    if not os.path.exists(logdir):
+        os.makedirs(logdir)
+    saver.save(sess, checkpoint_path, global_step=step)
+    print('The checkpoint has been created.')
 
 def load(saver, sess, ckpt_path):
     saver.restore(sess, ckpt_path)
@@ -58,17 +58,16 @@ def main():
     img, filename = load_img(args.img_path)
     img_shape = tf.shape(img)
     h, w = (tf.maximum(crop_size[0], img_shape[0]), tf.maximum(crop_size[1], img_shape[1]))
-    img = preprocess(img, h, w)
+    img = preprocess(tf.Print(img, [h, w]), h, w)
 
     # Create network.
-    net = PSPNet({'data': img}, is_training=False, num_classes=num_classes)
+    net = PSPNet({'data': tf.Print(img, [tf.shape(img)])}, is_training=False, num_classes=num_classes)
     with tf.variable_scope('', reuse=True):
         flipped_img = tf.image.flip_left_right(tf.squeeze(img))
         flipped_img = tf.expand_dims(flipped_img, dim=0)
         net2 = PSPNet({'data': flipped_img}, is_training=False, num_classes=num_classes)
 
-    raw_output = net.layers['conv6']
-    
+    raw_output = tf.Print(net.layers['conv6'], ['whoaaa']) 
     # Do flipped eval or not
     if args.flipped_eval:
         flipped_output = tf.image.flip_left_right(tf.squeeze(net2.layers['conv6']))
@@ -76,10 +75,11 @@ def main():
         raw_output = tf.add_n([raw_output, flipped_output])
 
     # Predictions.
-    raw_output_up = tf.image.resize_bilinear(raw_output, size=[h, w], align_corners=True)
-    raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, img_shape[0], img_shape[1])
-    raw_output_up = tf.argmax(raw_output_up, dimension=3)
-    pred = decode_labels(raw_output_up, img_shape, num_classes)
+    raw_output_up_a = tf.image.resize_bilinear(tf.Print(raw_output, ['waluigi:', tf.shape(raw_output)]), size=[h, w], align_corners=True)
+    raw_output_up_b  = tf.image.crop_to_bounding_box(tf.Print(raw_output_up_a, ['wahhhh:', tf.shape(raw_output_up_a), img_shape]), 0, 0, img_shape[0], img_shape[1])
+    raw_output_up = tf.argmax(raw_output_up_b, dimension=3)
+    #raw_output_up = tf.argmax(raw_output, dimension=3)
+    pred = decode_labels(tf.Print(raw_output_up, ['3:', img_shape, tf.unique(tf.reshape(raw_output_up, [-1]))[0]]), img_shape, num_classes)
     
     # Init tf Session
     config = tf.ConfigProto()
@@ -99,10 +99,29 @@ def main():
     else:
         print('No checkpoint file found.')
     
-    print(sess.run(raw_output))
-    print(sess.run(raw_output_up)) 
-    preds = sess.run(pred)
-    print(preds)
+    """
+    ra = sess.run(tf.squeeze(tf.argmax(raw_output_up_a, dimension=3)))
+    print('RAW A:')
+    print(ra)
+    print(ra.shape)
+    print((ra * 256).shape)
+    print(np.bincount(ra.flatten()))
+    misc.imsave('a.png', ra * 256)
+    """
+
+    rb = sess.run(tf.squeeze(tf.argmax(raw_output_up_a, dimension=3)))
+    print('RAW B:')
+    print(rb)
+    print(rb.shape)
+    print((rb * 256).shape)
+    print(np.bincount(rb.flatten()))
+    misc.imsave('b.png', rb * 256)
+
+
+
+    print('asdf')
+    preds = sess.run(tf.Print(pred, ['pred:', tf.unique_with_counts(tf.reshape(tf.argmax(pred, -1), [-1]))[2]]))
+    # print(preds)
     
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
